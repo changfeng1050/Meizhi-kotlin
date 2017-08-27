@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_meizhi"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp"
+    android:layout_marginEnd="1dp"
+    android:layout_marginStart="1dp"
+    android:layout_marginTop="2dp"
+    android:background="@drawable/bg_card"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+    <me.zjl.meizhi.widget.RatioImageView
+        android:layout_width="match_parent"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:id="@+id/ratio_image_view_meizhi"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="10dp"
+        android:background="?attr/selectableItemBackground"
+        android:paddingBottom="10dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text_view_title"
+            android:layout_width="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

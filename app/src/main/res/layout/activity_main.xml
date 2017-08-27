@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.zjl.meizhi.ui.MainActivity">
+
+    <include layout="@layout/view_toolbar" />
+
+    <me.zjl.meizhi.widget.MultiSwipRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingEnd="2.5dp"
+            android:paddingStart="2.5dp" />
+
+    </me.zjl.meizhi.widget.MultiSwipRefreshLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/main_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:clickable="true"
+        android:elevation="4dp"
+        android:focusable="true"
+        android:src="@mipmap/ic_github"
+        app:borderWidth="0dp"
+        app:elevation="4dp"
+        app:layout_anchor="@id/swipe_refresh_layout"
+        app:layout_anchorGravity="right|bottom" />
+
+</android.support.design.widget.CoordinatorLayout>

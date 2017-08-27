@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Meizhi</string>
+
+    <string name="action_subject">今日肥皂家话题</string>
+    <string name="action_github_login">登录 GitHub 帐号</string>
+    <string name="action_github_trending">今日 GitHub 热门</string>
+    <string name="action_share">分享</string>
+    <string name="action_refresh">刷新</string>
+    <string name="action_copy_url">复制链接</string>
+    <string name="action_open_url">打开链接</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_about">可爱的「关于」页面</string>
+    <string name="share">分享给朋友</string>
+    <string name="action_notifiable">每天中午提醒</string>
+
+    <string name="tip_login_github">妹纸 App 并无帐号系统，这个菜单只是提前登录保留 cookies，以便于之后进 GitHub 页面 star 项目</string>
+
+    <string name="tip_guide">指引: 点击卡片的标题文字，可以打开干货页面 :)</string>
+    <string name="i_know">知道了</string>
+    <string name="snap_load_fail">加载失败，请重试</string>
+    <string name="retry">重试</string>
+    <string name="ask_saving_picture">保存到手机?</string>
+    <string name="picture_has_save_to">图片已保存至 %s 文件夹</string>
+    <!--url-->
+    <string name="url_login_github">https://github.com/login</string>
+    <string name="url_github_trending">https://github.com/trending</string>
+    <string name="url_gank_io">http://gank.io/</string>
+    <string name="api">http://gank.io/</string>
+    <string name="notifiable_on">已经开启提醒</string>
+    <string name="notifiable_off">已经关闭提醒</string>
+    <string name="heads_up_title">妹纸.gank.io</string>
+    <string name="heads_up_content">今天的妹纸已经准备好了，快来享用吧~</string>
+</resources>

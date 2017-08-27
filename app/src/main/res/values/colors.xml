@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gray">#808080</color>
+    <color name="transparency">#00000000</color>
+    <color name="white">#ffffff</color>
+
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="refresh_progress_1">#e91e63</color>
+    <color name="refresh_progress_2">#00b0ff</color>
+
+    <color name="theme_primary">#432e2a</color>
+    <color name="theme_primary_darker">#2d1e1b</color>
+    <color name="theme_primary_dark">#231714</color>
+
+    <color name="refresh_progress_3">@color/theme_primary</color>
+    <color name="background_gank">@color/white</color>
+    <color name="about_header_background">@color/theme_primary_darker</color>
+
+    <color name="lite_blue">#ff359ff2</color>
+</resources>
