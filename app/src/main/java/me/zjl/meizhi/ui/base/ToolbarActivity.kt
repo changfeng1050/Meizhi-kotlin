@@ -14,9 +14,9 @@ import org.jetbrains.anko.onClick
 /**
  * Created by chang on 2017-08-17.
  */
-abstract class ToolBarActivity : BaseActivity() {
+abstract class ToolbarActivity : BaseActivity() {
     companion object {
-        val TAG: String = L.makeLogTag(ToolBarActivity::class.java)
+        val TAG: String = L.makeLogTag(ToolbarActivity::class.java)
     }
 
     abstract fun provideContentViewId(): Int
@@ -24,7 +24,7 @@ abstract class ToolBarActivity : BaseActivity() {
         return false
     }
 
-    protected open fun onToolbarClick(){}
+    protected open fun onToolbarClick() {}
 
     protected var appBar: AppBarLayout? = null
     protected var toolBar: Toolbar? = null
@@ -77,7 +77,7 @@ abstract class ToolBarActivity : BaseActivity() {
         appBar!!.alpha = alpha
     }
 
-    protected fun hideOrShowToolBar() {
+    protected open fun hideOrShowToolbar() {
         appBar!!.animate()
                 .translationY(if (isHidden) 0f else (0 - appBar!!.height).toFloat())
                 .setInterpolator(DecelerateInterpolator(2f))

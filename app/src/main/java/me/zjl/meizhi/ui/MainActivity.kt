@@ -120,7 +120,7 @@ class MainActivity : SwipeRefreshBaseActivity() {
     }
 
     private val onMeizhiTouchListener = object : OnMeizhiTouchListener {
-        override fun onTouch(v: View, meizhiView: View, car: View, meizhi: Meizhi) {
+        override fun onTouch(v: View, meizhiView: View, card: View, meizhi: Meizhi) {
             if (v == meizhiView && !meizhiBeTouched) {
                 meizhiBeTouched = true
                 Picasso.with(this@MainActivity).load(meizhi.url).fetch(object : Callback {
@@ -128,11 +128,12 @@ class MainActivity : SwipeRefreshBaseActivity() {
                         meizhiBeTouched = false
                         startPictureActivity(meizhi, meizhiView)
                     }
-
                     override fun onError() {
                         meizhiBeTouched = false
                     }
                 })
+            }else if (v == card) {
+
             }
 
         }

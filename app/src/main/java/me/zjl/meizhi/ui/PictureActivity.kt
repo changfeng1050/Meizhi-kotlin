@@ -7,7 +7,7 @@ import android.support.v4.view.ViewCompat
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import me.zjl.meizhi.R
-import me.zjl.meizhi.ui.base.ToolBarActivity
+import me.zjl.meizhi.ui.base.ToolbarActivity
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.find
 import org.jetbrains.anko.intentFor
@@ -16,7 +16,7 @@ import uk.co.senab.photoview.PhotoViewAttacher
 /**
  * Created by chang on 2017-08-23.
  */
-class PictureActivity : ToolBarActivity() {
+class PictureActivity : ToolbarActivity() {
 
     companion object {
         val EXTRA_IMAGE_URL = "image_url"
@@ -65,7 +65,7 @@ class PictureActivity : ToolBarActivity() {
     private fun setupPhotoAttacker() {
         photoViewAttacher = PhotoViewAttacher(imageView)
         photoViewAttacher.onViewTapListener = PhotoViewAttacher.OnViewTapListener { _, _, _ ->
-            hideOrShowToolBar()
+            hideOrShowToolbar()
         }
         photoViewAttacher.setOnLongClickListener {
             alert {

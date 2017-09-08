@@ -1,1 +1,1 @@
-include ':app', ':headsup'
+include ':app', ':headsup', ':smoothappbarlayout'

@@ -9,7 +9,7 @@ import me.zjl.meizhi.widget.MultiSwipRefreshLayout
 /**
  * Created by chang on 2017-08-17.
  */
-abstract class SwipeRefreshBaseActivity :ToolBarActivity(),MultiSwipRefreshLayout.SwipeRefreshLayer {
+abstract class SwipeRefreshBaseActivity : ToolbarActivity(),MultiSwipRefreshLayout.SwipeRefreshLayer {
     companion object {
         val TAG:String= L.makeLogTag(SwipeRefreshBaseActivity::class.java)
     }

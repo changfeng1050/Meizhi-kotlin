@@ -8,7 +8,7 @@ import me.zjl.meizhi.data.entity.Gank
  * Created by chang on 2017-08-16.
  */
 
-class GrankData : BaseData() {
+class GankData : BaseData() {
     var results: Result? = null
     var category: List<String>? = null
 
