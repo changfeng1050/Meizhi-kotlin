@@ -12,9 +12,11 @@ import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import android.widget.TextSwitcher
 import android.widget.TextView
+import com.daimajia.numberprogressbar.NumberProgressBar
 import me.zjl.meizhi.R
 import me.zjl.meizhi.ui.base.ToolbarActivity
 import me.zjl.meizhi.util.Androids
@@ -38,7 +40,7 @@ class WebActivity : ToolbarActivity() {
     }
 
     lateinit var webView: WebView
-    lateinit var progressbar: ProgressBar
+    lateinit var progressbar: NumberProgressBar
     lateinit var textSwitcher: TextSwitcher
 
     private lateinit var url: String
@@ -46,9 +48,7 @@ class WebActivity : ToolbarActivity() {
 
     override fun provideContentViewId() = R.layout.activity_web
 
-    override fun canBack(): Boolean {
-        return true
-    }
+    override fun canBack() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +67,7 @@ class WebActivity : ToolbarActivity() {
             setSupportZoom(true)
         }
         webView.webChromeClient = ChromeClient()
+        webView.webViewClient = LoveClient()
 
         webView.loadUrl(url)
 
@@ -92,7 +93,7 @@ class WebActivity : ToolbarActivity() {
         textSwitcher.setText(title)
     }
 
-    private fun refesh() {
+    private fun refresh() {
         webView.reload()
     }
 
@@ -120,7 +121,7 @@ class WebActivity : ToolbarActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.action_refresh -> {
-                refesh()
+                refresh()
             }
             R.id.action_copy_url -> {
                 val copyDone = getString(R.string.tip_copy_done)
@@ -137,6 +138,7 @@ class WebActivity : ToolbarActivity() {
                 } else {
                     longToast(R.string.tip_open_fail)
                 }
+
                 return true
             }
 
@@ -174,7 +176,15 @@ class WebActivity : ToolbarActivity() {
             super.onReceivedTitle(view, title)
             setTitle(title)
         }
+    }
 
+    private inner class LoveClient : WebViewClient() {
+        override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+            if (url != null) {
+                view!!.loadUrl(url)
+            }
+            return true
+        }
 
     }
 

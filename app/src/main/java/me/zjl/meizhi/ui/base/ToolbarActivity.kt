@@ -20,9 +20,7 @@ abstract class ToolbarActivity : BaseActivity() {
     }
 
     abstract fun provideContentViewId(): Int
-    open fun canBack(): Boolean {
-        return false
-    }
+    open fun canBack() = false
 
     protected open fun onToolbarClick() {}
 
@@ -65,7 +63,7 @@ abstract class ToolbarActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item!!.itemId == R.id.home) {
+        return if (item!!.itemId == android.R.id.home) {
             onBackPressed()
             true
         } else {

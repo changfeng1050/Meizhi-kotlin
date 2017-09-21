@@ -41,6 +41,9 @@
             android:theme="@style/NoReDrawWindowsBackground" />
 
         <activity
+            android:name=".ui.WebActivity"
+            android:launchMode="singleTask"/>
+        <activity
             android:name=".ui.AboutActivity"
             android:launchMode="singleTask" />
         <activity android:name=".ui.PictureActivity" />

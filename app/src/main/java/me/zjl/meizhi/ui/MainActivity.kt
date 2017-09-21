@@ -2,6 +2,7 @@ package me.zjl.meizhi.ui
 
 import android.os.Bundle
 import android.os.Handler
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
@@ -25,6 +26,8 @@ import me.zjl.meizhi.ui.adapter.MeizhiListAdapter
 import me.zjl.meizhi.ui.base.SwipeRefreshBaseActivity
 import me.zjl.meizhi.util.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.onClick
 import org.jetbrains.anko.toast
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -41,7 +44,7 @@ class MainActivity : SwipeRefreshBaseActivity() {
 
     private lateinit var meizhiListAdapter: MeizhiListAdapter
 
-    private lateinit var recylcerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
 
     private lateinit var meizhiList: MutableList<Meizhi>
 
@@ -50,6 +53,8 @@ class MainActivity : SwipeRefreshBaseActivity() {
     private var size = 10
 
     private var meizhiBeTouched = false
+    private var isFirstTimeTouchBottom = true
+    private var lastVideoIndex = 0
 
     override fun provideContentViewId(): Int {
         return R.layout.activity_main
@@ -59,7 +64,15 @@ class MainActivity : SwipeRefreshBaseActivity() {
         super.onCreate(savedInstanceState)
 
 
-        recylcerView = find(R.id.list)
+        recyclerView = find(R.id.list)
+
+//        val fab = find<FloatingActionButton>(R.id.main_fab)
+
+//        fab.onClick {
+//            if (meizhiList.isNotEmpty()) {
+//                startGankActivity(meizhiList.first().publishedAt!!)
+//            }
+//        }
 
         meizhiList = mutableListOf()
 
@@ -84,78 +97,21 @@ class MainActivity : SwipeRefreshBaseActivity() {
 
     private fun setupRecyclerView() {
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        recylcerView.layoutManager = layoutManager
+        recyclerView.layoutManager = layoutManager
         meizhiListAdapter = MeizhiListAdapter(this, meizhiList)
 
-        recylcerView.adapter = meizhiListAdapter
+        recyclerView.adapter = meizhiListAdapter
 
         Once(this).show("tip_guide_6") {
-            Snackbar.make(recylcerView, getString(R.string.tip_guide), Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(recyclerView, getString(R.string.tip_guide), Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.i_know) {
 
                     }.show()
         }
 
-        recylcerView.addOnScrollListener(getOnBottomListener(layoutManager))
+        recyclerView.addOnScrollListener(getOnBottomListener(layoutManager))
         meizhiListAdapter.onMeizhiTouchListener = onMeizhiTouchListener
 
-    }
-
-    private var isFirstTimeTouchBottom = true;
-    private fun getOnBottomListener(layoutManager: StaggeredGridLayoutManager): RecyclerView.OnScrollListener {
-        return object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val isBottom = layoutManager.findLastCompletelyVisibleItemPositions(kotlin.IntArray(2))[1] >= meizhiListAdapter.itemCount - PRELOAD_SIZE
-                if (swipeRefreshLayout!!.isRefreshing && isBottom) {
-                    if (isFirstTimeTouchBottom) {
-                        swipeRefreshLayout!!.isRefreshing = true
-                        page += 1
-                        loadData()
-                    } else {
-                        isFirstTimeTouchBottom = false
-                    }
-                }
-            }
-        }
-    }
-
-    private val onMeizhiTouchListener = object : OnMeizhiTouchListener {
-        override fun onTouch(v: View, meizhiView: View, card: View, meizhi: Meizhi) {
-            if (v == meizhiView && !meizhiBeTouched) {
-                meizhiBeTouched = true
-                Picasso.with(this@MainActivity).load(meizhi.url).fetch(object : Callback {
-                    override fun onSuccess() {
-                        meizhiBeTouched = false
-                        startPictureActivity(meizhi, meizhiView)
-                    }
-                    override fun onError() {
-                        meizhiBeTouched = false
-                    }
-                })
-            }else if (v == card) {
-
-            }
-
-        }
-    }
-
-    private fun startPictureActivity(meizhi: Meizhi, transitView: View) {
-        val intent = PictureActivity.newIntent(this@MainActivity, meizhi.url!!, meizhi.desc!!)
-        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this@MainActivity, transitView, PictureActivity.TRANSIT_PIC)
-        try {
-            ActivityCompat.startActivity(this@MainActivity, intent, optionsCompat.toBundle())
-        } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
-            startActivity(intent)
-        }
-
-    }
-
-    private var lastVideoIndex = 0
-
-    private fun loadData() {
-        loadData(false)
     }
 
     private fun loadData(clean: Boolean) {
@@ -188,17 +144,17 @@ class MainActivity : SwipeRefreshBaseActivity() {
 
     }
 
-    private fun saveMeizhis(meizhis: List<Meizhi>) {
-        App.sDb!!.insert(meizhis, ConflictAlgorithm.Replace)
-    }
-
     private fun loadError(throwable: Throwable) {
         L.e(TAG, "loadError()", throwable)
-        Snackbar.make(recylcerView, R.string.snap_load_fail, Snackbar.LENGTH_LONG)
+        Snackbar.make(recyclerView, R.string.snap_load_fail, Snackbar.LENGTH_LONG)
                 .setAction(R.string.retry) {
                     requestDataRefresh()
                 }
                 .show()
+    }
+
+    private fun saveMeizhis(meizhis: List<Meizhi>) {
+        App.sDb!!.insert(meizhis, ConflictAlgorithm.Replace)
     }
 
     private fun createMeizhiDataWith休息视频Desc(data: MeizhiData, love: 休息视频Data): MeizhiData {
@@ -223,6 +179,64 @@ class MainActivity : SwipeRefreshBaseActivity() {
         }
     }
 
+    private fun loadData() {
+        loadData(false)
+    }
+
+    private val onMeizhiTouchListener = object : OnMeizhiTouchListener {
+        override fun onTouch(v: View, meizhiView: View, card: View, meizhi: Meizhi) {
+            if (v == meizhiView && !meizhiBeTouched) {
+                meizhiBeTouched = true
+                Picasso.with(this@MainActivity).load(meizhi.url).fetch(object : Callback {
+                    override fun onSuccess() {
+                        meizhiBeTouched = false
+                        startPictureActivity(meizhi, meizhiView)
+                    }
+
+                    override fun onError() {
+                        meizhiBeTouched = false
+                    }
+                })
+            } else if (v == card) {
+                startGankActivity(meizhi.publishedAt!!)
+            }
+        }
+    }
+
+    private fun startGankActivity(publishedAt: Date) {
+        startActivity(intentFor<GankActivity>(GankActivity.EXTRA_GANK_DATE to publishedAt))
+    }
+
+
+    private fun startPictureActivity(meizhi: Meizhi, transitView: View) {
+        val intent = PictureActivity.newIntent(this@MainActivity, meizhi.url!!, meizhi.desc!!)
+        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this@MainActivity, transitView, PictureActivity.TRANSIT_PIC)
+        try {
+            ActivityCompat.startActivity(this@MainActivity, intent, optionsCompat.toBundle())
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+            startActivity(intent)
+        }
+    }
+
+    override fun onToolbarClick() {
+        recyclerView.smoothScrollToPosition(0)
+    }
+
+    override fun requestDataRefresh() {
+        super.requestDataRefresh()
+        page = 1
+        loadData(true)
+    }
+
+    private fun openGithubTrending() {
+        val url = getString(R.string.url_github_trending)
+        val title = getString(R.string.action_github_trending)
+        val intent = WebActivity.newIntent(this, url, title)
+        startActivity(intent)
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -236,8 +250,7 @@ class MainActivity : SwipeRefreshBaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val id = item!!.itemId
-        return when (id) {
+        return when (item!!.itemId) {
             R.id.action_tending -> {
                 openGithubTrending()
                 true
@@ -253,9 +266,21 @@ class MainActivity : SwipeRefreshBaseActivity() {
         }
     }
 
-
-    private fun openGithubTrending() {
-        // todo
+    private fun getOnBottomListener(layoutManager: StaggeredGridLayoutManager): RecyclerView.OnScrollListener {
+        return object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val isBottom = layoutManager.findLastCompletelyVisibleItemPositions(kotlin.IntArray(2))[1] >= meizhiListAdapter.itemCount - PRELOAD_SIZE
+                if (swipeRefreshLayout!!.isRefreshing && isBottom) {
+                    if (isFirstTimeTouchBottom) {
+                        swipeRefreshLayout!!.isRefreshing = true
+                        page += 1
+                        loadData()
+                    } else {
+                        isFirstTimeTouchBottom = false
+                    }
+                }
+            }
+        }
     }
 
 }

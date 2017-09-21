@@ -9,6 +9,7 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.animation.DecelerateInterpolator
+import android.widget.RelativeLayout
 import me.zjl.meizhi.LoveBus
 import me.zjl.meizhi.R
 import me.zjl.meizhi.event.OnKeyBackClickEvent
@@ -74,7 +75,7 @@ class GankActivity : ToolbarActivity(), ViewPager.OnPageChangeListener {
     }
 
     override fun hideOrShowToolbar() {
-        val toolbar = find<Toolbar>(R.id.toolbar_with_indicator)
+        val toolbar: RelativeLayout = find(R.id.toolbar_with_indicator)
         toolbar.animate()
                 .translationY(if (isHidden) 0.toFloat() else -toolbar.height.toFloat())
                 .setInterpolator(DecelerateInterpolator(2f))
@@ -134,8 +135,6 @@ class GankActivity : ToolbarActivity(), ViewPager.OnPageChangeListener {
 
     override fun onPageScrollStateChanged(state: Int) {
     }
-
-
 
 
 }

@@ -8,26 +8,27 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import android.webkit.WebViewClient
 import com.bumptech.glide.Glide
 import com.squareup.otto.Subscribe
 import me.zjl.meizhi.LoveBus
 import me.zjl.meizhi.MeizhiFactory
 import me.zjl.meizhi.R
 import me.zjl.meizhi.data.GankData
-import me.zjl.meizhi.data.entity.DGankData
 import me.zjl.meizhi.data.entity.Gank
 import me.zjl.meizhi.event.OnKeyBackClickEvent
 import me.zjl.meizhi.ui.adapter.GankListAdapter
 import me.zjl.meizhi.ui.base.BaseActivity
 import me.zjl.meizhi.util.L
+import me.zjl.meizhi.util.MyGson
 import me.zjl.meizhi.util.Once
 import me.zjl.meizhi.widget.LoveVideoView
 import me.zjl.meizhi.widget.VideoImageView
 import me.zjl.smoothappbarlayout.SmoothAppBarLayout
 import okhttp3.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.longToast
 import org.jetbrains.anko.onClick
+import org.jetbrains.anko.share
 import org.jetbrains.anko.support.v4.*
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
@@ -52,7 +53,7 @@ class GankFragment : Fragment() {
     lateinit var emptyViewStub: ViewStub
     lateinit var videoViewStub: ViewStub
     var videoImageView: VideoImageView? = null
-    lateinit var videoView: LoveVideoView
+    var videoView: LoveVideoView? = null
 
     var year: Int = 2017
     var month: Int = 8
@@ -94,9 +95,10 @@ class GankFragment : Fragment() {
         val headerAppbar: SmoothAppBarLayout = view.find(R.id.header_appbar)
         headerAppbar.onClick {
             resumeVideoView()
+
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             if (gankList.firstOrNull()?.type == "休息视频") {
-                longToast(R.string.loading)
+                activity.longToast(R.string.loading)
             } else {
                 closePlayer()
             }
@@ -119,7 +121,7 @@ class GankFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        val layoutManager = LinearLayoutManager(ctx)
+        val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
     }
@@ -136,6 +138,7 @@ class GankFragment : Fragment() {
                     if (it!!.isEmpty()) {
                         showEmptyView()
                     } else {
+
                         adapter.notifyDataSetChanged()
                     }
                 }, {
@@ -207,9 +210,10 @@ class GankFragment : Fragment() {
                 gankList.addAll(it)
             }
             休息视频?.let {
-                gankList.addAll(it)
+                gankList.addAll(0, it)
             }
         }
+
         return gankList
     }
 
@@ -222,14 +226,15 @@ class GankFragment : Fragment() {
                     videoView = videoViewStub.inflate() as LoveVideoView
                     isVideoViewInflated = true
 
-                    Once(videoView.context).show(R.string.tip_video_play) {
-                        Snackbar.make(videoView, R.string.tip_video_play, Snackbar.LENGTH_INDEFINITE)
+                    Once(videoView!!.context).show(R.string.tip_video_play) {
+                        Snackbar.make(videoView!!, R.string.tip_video_play, Snackbar.LENGTH_INDEFINITE)
                                 .setAction(R.string.i_know) {}
                                 .show()
                     }
                 }
+
                 if (gankList.firstOrNull()?.type == "休息视频") {
-                    videoView.loadUrl(gankList.first().url)
+                    videoView!!.loadUrl(gankList.first().url)
                 }
             }
             else -> {
@@ -239,7 +244,7 @@ class GankFragment : Fragment() {
     }
 
     private fun closePlayer() {
-        act.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         toast(R.string.tip_for_no_gank)
     }
 
@@ -248,7 +253,8 @@ class GankFragment : Fragment() {
         super.onConfigurationChanged(newConfig)
     }
 
-    @Subscribe fun onKeyBackClick(event: OnKeyBackClickEvent) {
+    @Subscribe
+    fun onKeyBackClick(event: OnKeyBackClickEvent) {
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
@@ -264,7 +270,7 @@ class GankFragment : Fragment() {
                 } else {
                     getString(R.string.share_text)
                 }
-                share(shareText)
+                context.share(shareText)
                 return true
             }
             R.id.action_subject -> {
@@ -301,20 +307,26 @@ class GankFragment : Fragment() {
     }
 
     private fun pauseVideoView() {
-        videoView.onPause()
-        videoView.pauseTimers()
+        if (videoView != null) {
+            videoView!!.onPause()
+            videoView!!.pauseTimers()
+        }
     }
 
     private fun resumeVideoView() {
-        videoView.resumeTimers()
-        videoView.onResume()
+        if (videoView != null) {
+            videoView!!.resumeTimers()
+            videoView!!.onResume()
+        }
     }
 
     private fun clearVideoView() {
-        videoView.clearHistory()
-        videoView.clearCache(true)
-        videoView.loadUrl("about:blank")
-        videoView.pauseTimers()
+        if (videoView != null) {
+            videoView!!.clearHistory()
+            videoView!!.clearCache(true)
+            videoView!!.loadUrl("about:blank")
+            videoView!!.pauseTimers()
+        }
     }
 
 

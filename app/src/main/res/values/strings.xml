@@ -63,4 +63,6 @@
     <string name="notifiable_on">已经开启提醒</string>
     <string name="notifiable_off">已经关闭提醒</string>
     <string name="share_meizhi_to">分享妹纸到…</string>
+
+    <string name="version">Version %1$s</string>
 </resources>

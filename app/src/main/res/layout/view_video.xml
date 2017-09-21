@@ -3,5 +3,4 @@
     android:id="@+id/video_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layerType="hardware">
-</me.zjl.meizhi.widget.LoveVideoView>
+    android:layerType="hardware"/>

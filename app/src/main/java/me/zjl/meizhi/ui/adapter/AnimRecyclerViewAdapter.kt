@@ -10,14 +10,15 @@ import me.zjl.meizhi.R
 /**
  * Created by chang on 2017-08-27.
  */
-open class AnimRecyclerViewAdapter<T:RecyclerView.ViewHolder>:RecyclerView.Adapter<T>() {
+open class AnimRecyclerViewAdapter<T : RecyclerView.ViewHolder> : RecyclerView.Adapter<T>() {
 
     companion object {
         val DELAY = 138
     }
-    var lastPos=-1
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T ?{
+    var lastPos = -1
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T? {
         return null
     }
 
@@ -31,15 +32,15 @@ open class AnimRecyclerViewAdapter<T:RecyclerView.ViewHolder>:RecyclerView.Adapt
 
 
     fun showItemAnim(view: View, pos: Int) {
-       val context = view.context
+        val context = view.context
         if (pos > lastPos) {
             view.alpha = 0f
             view.postDelayed({
                 val a = AnimationUtils.loadAnimation(context, R.anim.slide_in_right)
 
-                a.setAnimationListener(object :Animation.AnimationListener{
+                a.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationStart(p0: Animation?) {
-                        view.alpha =1f
+                        view.alpha = 1f
                     }
 
                     override fun onAnimationEnd(p0: Animation?) {
@@ -48,6 +49,8 @@ open class AnimRecyclerViewAdapter<T:RecyclerView.ViewHolder>:RecyclerView.Adapt
                     override fun onAnimationRepeat(p0: Animation?) {
                     }
                 })
+
+                view.startAnimation(a)
 
             }, DELAY * pos.toLong())
 

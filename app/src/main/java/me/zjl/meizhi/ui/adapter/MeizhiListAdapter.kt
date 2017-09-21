@@ -73,7 +73,7 @@ class MeizhiListAdapter(val context: Context, val list: List<Meizhi>) : Recycler
 
         init {
             meizhiView.setOnClickListener(this)
-            titleView.setOnClickListener(this)
+            card.setOnClickListener(this)
             meizhiView.setOriginalSize(50, 50)
 
         }
